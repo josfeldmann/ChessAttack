@@ -2,7 +2,11 @@
 using UnityEngine;
 
 public class KingPiece : ChessPiece {
-    public override void ExecuteMove() {
+    public override Vector3Int GetMoveIfCantAttack(List<Vector3Int> moves) {
+        throw new System.NotImplementedException();
+    }
+
+    public override List<Vector3Int> GetPossibleAttacks() {
         throw new System.NotImplementedException();
     }
 
@@ -10,12 +14,16 @@ public class KingPiece : ChessPiece {
         currentMoves = new List<Vector3Int>();
         if (x > 0) {
             currentMoves.Add(new Vector3Int(x - 1, y, 0));
+            if (y > 0) currentMoves.Add(new Vector3Int(x - 1, y - 1, 0));
+            if (y < controller.boardWidth - 1) currentMoves.Add(new Vector3Int(x - 1, y + 1, 0));
         }
         if (y > 0)  {
             currentMoves.Add(new Vector3Int(x, y - 1, 0));
         }
         if (x < controller.boardWidth-1) {
             currentMoves.Add(new Vector3Int(x + 1, y, 0));
+            if (y < controller.boardWidth - 1)  currentMoves.Add(new Vector3Int(x + 1, y + 1, 0));
+            if (y > 0)  currentMoves.Add(new Vector3Int(x + 1, y - 1, 0));      
         }
         if (y < controller.boardWidth-1) {
             currentMoves.Add(new Vector3Int(x, y + 1, 0));
@@ -24,13 +32,11 @@ public class KingPiece : ChessPiece {
         return currentMoves;
     }
 
-    public override Vector3Int PickMoveAI(ChessPiece target) {
-        if (currentMoves == null || currentMoves.Count == 0) {
-            return new Vector3Int(x, y,0);
-        }
-        return new Vector3Int(x, y, 0);
-
+    public override void Move() {
+        DefaultMove();
     }
+
+   
 }
 
 

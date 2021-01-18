@@ -10,18 +10,33 @@ public class PlayerIdleState : State<ChessController> {
     }
 
     public override void Exit(ChessController obj) {
-        obj.DecreaseSpawnInterval();
+        
     }
 
+    private ChessPiece capturedPiece = null;
+
     public override State<ChessController> Update(ChessController obj) {
-        //Debug.Log("Here");
+        
+        if (obj.PlayerController.isMoving) {
+            obj.PlayerController.Move();
+            if (!obj.PlayerController.isMoving) {
+                if (capturedPiece) obj.CapturePiece(capturedPiece);
+                return new EnemyTurn();
+            }
+            return this;
+        }
+        
+        
         if (obj.inputManager.inputTouch) {
             Vector3Int clickedPos = obj.map.WorldToCell(obj.cam.ScreenToWorldPoint(Input.mousePosition));
-            //Debug.Log(clickedPos);
-            //Debug.Break();
+      
             if (possiblePlayerMoves.Contains(clickedPos)) {
-                obj.PlayerController.InstantMove(clickedPos);
-                return new EnemyTurn();
+                capturedPiece = obj.chessGrid[clickedPos.x, clickedPos.y];
+                obj.PlayerController.StartMoving(clickedPos);
+                
+
+
+                return this;
             } else {
                 obj.PlayErrorSound();
             }
