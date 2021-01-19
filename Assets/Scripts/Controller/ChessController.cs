@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 public class ChessController : MonoBehaviour {
 
 
-    public Dictionary<ChessPieceBase, int> scoreKeeper;
+    public Dictionary<ChessPieceBase, int> scoreKeeper = new Dictionary<ChessPieceBase, int>();
 
     
     public Vector3Int minStartPos = new Vector3Int(2,2,0), maxStartPos = new Vector3Int(5,5,0);
@@ -39,16 +39,20 @@ public class ChessController : MonoBehaviour {
 
     internal void CapturePiece(ChessPiece capturedPiece) {
         enemyPieces.Remove(capturedPiece);
+        scoreKeeper[capturedPiece.pieceBase] += 1;
+        scoreDisplayers[capturedPiece.pieceBase].UpdateValue();
         Destroy(capturedPiece.gameObject);
     }
 
     private int currentSpawnInterval = 0;
 
     [Header("UI Elements")]
+    public GameOverMenu gameOverMenu;
     public Transform scorePrefabGroupingTransform;
     public ScoreDisplayText scorePrefab;
     public GameObject StartText;
     
+    private int turnCount = 0;
 
 
     public ChessPiece[,] chessGrid = new ChessPiece[8, 8];
@@ -65,19 +69,32 @@ public class ChessController : MonoBehaviour {
         currentSpawnText.SetNumber(currentSpawnInterval);
         currentSpawnNumber = startingNumberPerSpawn;
         difficultycounter = 0;
+        SetUpScoreMenu();
+        gameOverMenu.DeActivate();
     }
 
-    private List<ScoreDisplayText> scoresDisplayers = new List<ScoreDisplayText>();
+    private Dictionary<ChessPieceBase, ScoreDisplayText> scoreDisplayers = new Dictionary<ChessPieceBase, ScoreDisplayText>();
 
     public void SetUpScoreMenu() {
+        scoreDisplayers = new Dictionary<ChessPieceBase, ScoreDisplayText>();
+        scoreKeeper = new Dictionary<ChessPieceBase, int>();
         foreach (ChessPiece c in piecePrefabs) {
             scoreKeeper.Add(c.pieceBase, 0);
             ScoreDisplayText s = Instantiate(scorePrefab, scorePrefabGroupingTransform);
-
+            s.init(this, c.pieceBase);
+            scoreDisplayers.Add(c.pieceBase,s);
         }
 
 
 
+    }
+
+    public int CalculateScore() {
+        int total = 0;
+        foreach (KeyValuePair<ChessPieceBase, int> kv in scoreKeeper)   {
+            total += kv.Key.scoreValue * kv.Value;
+        }
+        return total;
     }
 
     public void SpawnNewChessPiece() {
@@ -152,6 +169,8 @@ public class ChessController : MonoBehaviour {
 
     internal void GameOver() {
         isGameOver = true;
+        gameOverMenu.init(CalculateScore(), turnCount);
+        gameOverMenu.Activate();
     }
 }
 

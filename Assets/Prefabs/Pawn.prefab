@@ -44,14 +44,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9f42d0691292354a9b29f029c07e88f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 5
   pieceBase: {fileID: 11400000, guid: dcba8bd575d7e1440adb20d57372e257, type: 2}
   enemyLayer: 0
+  controller: {fileID: 0}
   x: 0
   y: 0
   targetPos: {x: 0, y: 0, z: 0}
   direction: {x: 0, y: 0, z: 0}
+  moveOffBoardTarget: 0
   isMoving: 0
-  moveSpeed: 5
 --- !u!1 &2689841983336140113
 GameObject:
   m_ObjectHideFlags: 0
