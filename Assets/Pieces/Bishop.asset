@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Bishop
   m_EditorClassIdentifier: 
   pieceName: Bishop
-  spriteImage: {fileID: 21300000, guid: 8ec409bab26a3c3418f3cb9a72c713f5, type: 3}
+  spriteImage: {fileID: -156822502178163421, guid: fd175c9ae14324c4c99875228eecd2ed, type: 3}
   scoreValue: 2

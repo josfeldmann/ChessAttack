@@ -29,10 +29,10 @@ public class BishopPiece : ChessPiece {
     public override List<Vector3Int> GetPossibleMoves() {
 
         List<Vector3Int> moves = new List<Vector3Int>();
-        GetVectorInDirection(this, new Vector3Int(1,1,0), moves);
-        GetVectorInDirection(this,new Vector3Int(1,-1,0), moves);
-        GetVectorInDirection(this, new Vector3Int(-1,1,0), moves);
-        GetVectorInDirection(this, new Vector3Int(-1,-1,0), moves);
+        GetVectorInDirection(this, new Vector3Int(1,1,0), moves, false);
+        GetVectorInDirection(this,new Vector3Int(1,-1,0), moves, false);
+        GetVectorInDirection(this, new Vector3Int(-1,1,0), moves, false);
+        GetVectorInDirection(this, new Vector3Int(-1,-1,0), moves, false);
 
         return moves;
 

@@ -29,10 +29,10 @@ public class RookPiece : ChessPiece {
     public override List<Vector3Int> GetPossibleMoves() {
 
         List<Vector3Int> moves = new List<Vector3Int>();
-        GetVectorInDirection(this, Vector3Int.right, moves);
-        GetVectorInDirection(this, Vector3Int.left, moves);
-        GetVectorInDirection(this, Vector3Int.down, moves);
-        GetVectorInDirection(this, Vector3Int.up, moves);
+        GetVectorInDirection(this, Vector3Int.right, moves, false);
+        GetVectorInDirection(this, Vector3Int.left, moves, false);
+        GetVectorInDirection(this, Vector3Int.down, moves, false);
+        GetVectorInDirection(this, Vector3Int.up, moves, false);
 
         return moves;
 

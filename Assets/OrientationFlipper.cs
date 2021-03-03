@@ -50,7 +50,7 @@ public class OrientationFlipper : MonoBehaviour
     public void ApplyCameraSize(CameraSize s) {
 
         current = s;
-        text.text = s.orientation;
+        //text.text = s.orientation;
         if (s.isWidth) {
             float aspect = (float)Screen.width / (float)Screen.height;
             float height = s.desiredOrthographicSize / aspect;

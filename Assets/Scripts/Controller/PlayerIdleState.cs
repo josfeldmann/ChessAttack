@@ -6,6 +6,7 @@ public class PlayerIdleState : State<ChessController> {
     List<Vector3Int> possiblePlayerMoves = new List<Vector3Int>();
 
     public override void Enter(ChessController obj) {
+        obj.IncreaseTurnCounter();
         possiblePlayerMoves = obj.PlayerController.GetPossibleMoves();
     }
 

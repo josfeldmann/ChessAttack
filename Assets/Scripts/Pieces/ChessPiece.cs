@@ -22,6 +22,8 @@ public abstract class ChessPiece : MonoBehaviour
 
 
     protected Vector3 prevPosition;
+    protected Vector3 Curve1;
+    protected Vector3 Curve2;
     protected Vector3 targetPosition;
     public bool isMoving;
     
@@ -79,8 +81,14 @@ public abstract class ChessPiece : MonoBehaviour
         isMoving = true;
         targetPos = pos;
         SetGridToTargetPos();
+
+        
+
         prevPosition = transform.position;
         targetPosition = new Vector3(pos.x, pos.y);
+        Curve1 = new Vector3(0, 0.66f, 0);
+        Curve2 = new Vector3(0, 0.66f, 0);
+
 
     }
 
@@ -90,6 +98,35 @@ public abstract class ChessPiece : MonoBehaviour
         x = destination.x;
         y = destination.y;
     }
+
+    private Vector3 GetPoint(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3) {
+        float cx = 3 * (p1.x - p0.x);
+        float cy = 3 * (p1.y - p0.y);
+        float bx = 3 * (p2.x - p1.x) - cx;
+        float by = 3 * (p2.y - p1.y) - cy;
+        float ax = p3.x - p0.x - cx - bx;
+        float ay = p3.y - p0.y - cy - by;
+        float Cube = t * t * t;
+        float Square = t * t;
+
+        float resX = (ax * Cube) + (bx * Square) + (cx * t) + p0.x;
+        float resY = (ay * Cube) + (by * Square) + (cy * t) + p0.y;
+
+        return new Vector3(resX, resY, 0);
+    }
+
+    private float timer = 1;
+
+    public void BezierMove() {
+        if (timer < 1) {
+            timer += Time.deltaTime;
+            if (timer > 1) timer = 1;
+            transform.position = GetPoint(timer, prevPosition, Curve1, Curve2, targetPosition);
+        } else {
+            transform.position = targetPosition;
+            InstantMove(targetPos);
+        }   
+        }
 
 
     public void DefaultMove() {
@@ -103,7 +140,7 @@ public abstract class ChessPiece : MonoBehaviour
 
 
 
-    public void GetVectorInDirection(ChessPiece piece, Vector3Int direction, List<Vector3Int> addHere) {
+    public void GetVectorInDirection(ChessPiece piece, Vector3Int direction, List<Vector3Int> addHere, bool doneAfterOne) {
 
         int testx = x + direction.x;
         int testy = y + direction.y;
@@ -115,6 +152,7 @@ public abstract class ChessPiece : MonoBehaviour
             addHere.Add(new Vector3Int(testx, testy, 0));
             testx += direction.x;
             testy += direction.y;
+            if (doneAfterOne) return;
         }
 
     }

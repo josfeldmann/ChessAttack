@@ -25,6 +25,8 @@ public class ChessController : MonoBehaviour {
     [Header("Spawning")]
     public List<ChessPiece> piecePrefabs = new List<ChessPiece>();
     public NumberText currentSpawnText;
+    public NumberText turnCounterTest;
+    private int turnCounter = 0;
     public int StartingSpawnInterval = 5;
     public int minSpawnInterval = 3;
     public int SpawnInterval;
@@ -60,6 +62,7 @@ public class ChessController : MonoBehaviour {
     public State<ChessController> currentState;
 
     private void Awake() {
+        turnCounter = 0;
         Vector3Int startPos = new Vector3Int(Random.Range(minStartPos.x, maxStartPos.x), Random.Range(minStartPos.y, maxStartPos.y), 0);
         chessGrid = new ChessPiece[boardWidth, boardHeight];
         PlayerController.init(startPos, this, Vector3Int.zero, enemyLayer);
@@ -112,6 +115,11 @@ public class ChessController : MonoBehaviour {
 
         p.init(vec, this, direction, playerLayer);
         enemyPieces.Add(p);
+    }
+
+    public void IncreaseTurnCounter() {
+        turnCount++;
+        turnCounterTest.SetNumber(turnCount);
     }
 
     public void DecreaseSpawnInterval() {
